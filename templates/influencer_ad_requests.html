@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Influencer Dashboard - Ad Requests</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #1a1a1a;
+            --secondary-color: #ff6600;
+            --text-color: #f4f4f4;
+            --bg-color: #121212;
+            --card-bg-color: #2a2a2a;
+            --hover-color: #ff8533;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+        }
+
+        .dashboard {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: var(--primary-color);
+            padding: 2rem 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo h1 {
+            color: var(--secondary-color);
+            font-size: 1.5rem;
+        }
+
+        .nav-menu {
+            list-style-type: none;
+        }
+
+        .nav-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            color: var(--text-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+        }
+
+        .nav-link i {
+            margin-right: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            margin-left: 250px;
+            padding: 2rem;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .welcome-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .btn {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background-color: var(--hover-color);
+        }
+
+        .ad-requests-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2rem;
+            background-color: var(--card-bg-color);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .ad-requests-table th, .ad-requests-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #444;
+        }
+
+        .ad-requests-table th {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .ad-requests-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .ad-request-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .accept-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .reject-btn {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .chat-btn {
+            background-color: #2196F3;
+            color: white;
+        }
+
+        .action-btn:hover {
+            opacity: 0.8;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: var(--card-bg-color);
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 10px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #fff;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <aside class="sidebar">
+            <div class="logo">
+                <h1>The webAPP</h1>
+            </div>
+            <nav>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="{{ url_for('influencer') }}" class="nav-link">
+                            <i class="fas fa-home"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url_for('search_campaigns') }}" class="nav-link">
+                            <i class="fas fa-search"></i> Search Campaigns
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="{{ url_for('influencer_ad_requests') }}" class="nav-link active">
+                            <i class="fas fa-ad"></i> View Ad Requests
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url_for('influencer_profile') }}" class="nav-link">
+                            <i class="fas fa-user-edit"></i> Create Profile
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url_for('logout') }}" class="nav-link">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="header">
+                <h1 class="welcome-text">Your Ad Requests</h1>
+            </header>
+
+            <section class="ad-requests-section">
+
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        <ul class="flash-messages">
+                        {% for category, message in messages %}
+                            <li class="flash-message {{ category }}">{{ message }}</li>
+                        {% endfor %}
+                        </ul>
+                    {% endif %}
+                {% endwith %}
+
+                <table class="ad-requests-table">
+                    <thead>
+                        <tr>
+                            <th>Campaign</th>
+                            <th>Sponsor</th>
+                            <th>Status</th>
+                            <th>Details</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ad_request in ad_requests %}
+                        <tr>
+                            <td>{{ ad_request.campaign.title if ad_request.campaign else 'N/A' }}</td>
+                            <td>{{ ad_request.company_name }}</td>
+                            <td>{{ ad_request.status }}</td>
+                            <td>{{ ad_request.details }}</td>
+                            <td>
+                                {% if ad_request.status == 'pending' %}
+                                    <div class="ad-request-actions">
+                                        <form action="{{ url_for('influencer_ad_request_action', id=ad_request.id) }}" method="POST">
+                                            <input type="hidden" name="action" value="accept">
+                                            <button type="submit" class="action-btn accept-btn">Accept</button>
+                                        </form>
+                                        <form action="{{ url_for('influencer_ad_request_action', id=ad_request.id) }}" method="POST">
+                                            <input type="hidden" name="action" value="reject">
+                                            <button type="submit" class="action-btn reject-btn">Reject</button>
+                                        </form>
+                                        {% if ad_request.renegotiation_email %}
+                                            <button class="action-btn chat-btn" onclick="openChatModal('{{ ad_request.renegotiation_email }}')">Chat</button>
+                                        {% else %}
+                                            <button class="action-btn chat-btn" disabled>Chat Unavailable</button>
+                                        {% endif %}
+                                    </div>
+                                {% else %}
+                                    <p>No actions available</p>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+
+    <!-- Chat Modal -->
+    <div id="chatModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeChatModal()">&times;</span>
+            <h2>Contact Sponsor</h2>
+            <p>To discuss this campaign further, please email the sponsor at: <span id="sponsorEmail"></span></p>
+        </div>
+    </div>
+
+    <script>
+        function openChatModal(email) {
+            document.getElementById('chatModal').style.display = 'block';
+            document.getElementById('sponsorEmail').textContent = email;
+        }
+
+        function closeChatModal() {
+            document.getElementById('chatModal').style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('chatModal')) {
+                closeChatModal();
+            }
+        }
+    </script>
+</body>
+</html>

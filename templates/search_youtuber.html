@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search YouTuber</title>
+</head>
+<body>
+    <h1>Search for a YouTuber</h1>
+    <form method="POST">
+        <input type="text" name="name" placeholder="Enter YouTuber name" required>
+        <button type="submit">Search</button>
+    </form>
+
+    {% if result %}
+        <h2>Channel Stats</h2>
+        <ul>
+            <li><strong>Channel Title:</strong> {{ result['title'] }}</li>
+            <li><strong>Subscribers:</strong> {{ result['subscribers'] }}</li>
+            <li><strong>Total Views:</strong> {{ result['views'] }}</li>
+        </ul>
+    {% endif %}
+</body>
+</html>
