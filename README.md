@@ -36,18 +36,7 @@ This project is fully developed and maintained by **Chanaksha (Chanaksha2003)**.
 
 ## 📂 Folder Structure
 
-InfluConnect/
-├── app.py
-├── models.py
-├── templates/
-│ ├── *.html
-├── static/
-│ ├── css/
-│ └── images/
-├── youtube_utils.py
-├── requirements.txt
-├── README.md
-└── samples/ # screenshots for preview
+<pre lang="text"> ```plaintext InfluConnect/ ├── app.py ├── models.py ├── templates/ │ ├── *.html ├── static/ │ ├── css/ │ └── images/ ├── youtube_utils.py ├── requirements.txt ├── README.md └── samples/ # Screenshots for preview ``` </pre>
 
 
 ---
