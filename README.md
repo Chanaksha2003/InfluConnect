@@ -50,7 +50,7 @@ InfluConnect/
 ├── README.md
 └── samples/        # Screenshots for preview
 ```
-
+ 
 ---
 
 ## 🖼️ Sample Screenshots
