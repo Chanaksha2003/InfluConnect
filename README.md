@@ -1,4 +1,4 @@
-# InfluConnect - Influencer Marketing Platform
+# InfluConnect - Influencer Marketing Platform 
  
 ![InfluConnect Banner](samples/home.png)
 
