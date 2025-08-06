@@ -4,4 +4,4 @@ from flask_login import LoginManager
 # Create instances of the extensions
 
 db = SQLAlchemy()
-login_manager = LoginManager()
+login_manager = LoginManager() 
