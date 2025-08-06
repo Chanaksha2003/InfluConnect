@@ -33,3 +33,4 @@ def create_admin_command():
 def init_app(app):
     app.cli.add_command(create_admin_command)
 
+
