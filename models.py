@@ -1,7 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from extensions import db
-from flask_login import UserMixin
+from flask_login import UserMixin 
 
 """
 models.py - Database Models for The webAPP
