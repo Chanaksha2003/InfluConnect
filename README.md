@@ -6,59 +6,159 @@
 
 **InfluConnect** is a full-stack influencer campaign management platform built using **Python (Flask)**. It connects sponsors with influencers, enabling seamless ad requests, campaign creation, profile browsing, and campaign tracking — all within one streamlined application.
 
-This project is fully developed and maintained by **Chanaksha (Chanaksha2003)**.
+This project is fully developed and maintained by **Chanaksha (Chanaksha03@gmail.com)**.
 
 ---
 
-## 🔧 Features
+### **User Authentication: Secure and Seamless Access**  
+InfluConnect ensures secure access with its user-friendly signup and signin pages. Whether you're a sponsor, influencer, or admin, the authentication process is smooth and hassle-free.  
 
-- 👥 **User Roles**: Influencer, Sponsor, and Admin
-- 📢 **Campaign Management**: Create, edit, assign, and manage influencer campaigns
-- 🔍 **Influencer Search**: Filter by niche, reach, or channel type
-- ✅ **Ad Requests**: Sponsors can create and assign requests to influencers
-- 📊 **Admin Dashboard**: Monitor users, campaigns, and platform activity
-- 🔐 **User Authentication**: Secure sign-in/sign-up with session handling
-- 📈 **YouTube Stats Integration** (via YouTube Data API v3)
+![Signup](samples/mad1signin.png)  
+![Signin](samples/mad1signup.png)  
 
 ---
 
-## 🛠️ Tech Stack
+### **Sponsor Dashboard: Manage Campaigns with Ease**  
+The Sponsor Dashboard is the control center for sponsors. From here, sponsors can create, manage, and track campaigns, view ad requests, and analyze campaign performance—all in one place.  
 
-| Layer       | Tools / Libraries                          |
-|-------------|--------------------------------------------|
-| Backend     | Python, Flask, Flask-SQLAlchemy            |
-| Frontend    | HTML, CSS, Jinja2                          |
-| Database    | SQLite                                     |
-| APIs        | YouTube Data API v3                        |
-| Version Control | Git, GitHub                           |
+![SponsorDashboard](samples/sponsor_dashboard.png)  
 
 ---
 
-## 📂 Folder Structure
+### **Influencer Dashboard: Collaborate and Grow**  
+The Influencer Dashboard empowers influencers to manage their profiles, respond to ad requests, and collaborate with sponsors. It’s designed to help influencers maximize their reach and engagement.  
 
-```plaintext
-InfluConnect/
-├── app.py
-├── models.py
-├── templates/
-│   ├── *.html
-├── static/
-│   ├── css/
-│   └── images/
-├── youtube_utils.py
-├── requirements.txt
-├── README.md
-└── samples/        # Screenshots for preview
-```
- 
+![InfluencerDashboard](samples/influencer_dashboard.png)  
+
 ---
 
-## 🖼️ Sample Screenshots
+### **Admin Dashboard: Full Control Over the Platform**  
+The Admin Dashboard provides administrators with the tools to manage the platform effectively. From user management to flagged accounts, admins have full control to ensure the platform runs smoothly.  
 
-| Dashboard | Influencer View | Sponsor View |
-|----------|------------------|--------------|
-| ![Admin Dashboard](samples/admin_dashboard.png) | ![Influencer](samples/influencer_dashboard.png) | ![Sponsor](samples/sponsor_dashboard.png) |
+![AdminDashboard](samples/admin_dashboard.png)  
+
+---
+
+### **Ad Requests: Streamlined Collaboration**  
+The Ad Requests feature allows sponsors to send collaboration requests to influencers. Influencers can respond with acceptance, rejection, or negotiation, making the process transparent and efficient.  
+
+![AdRequest](samples/ad_requests.png)  
+
+---
+
+### **Campaign Management: Organize and Optimize**  
+Sponsors can easily manage their campaigns through the Campaign Management interface. From creating new campaigns to tracking their progress, everything is designed for maximum efficiency.  
+
+![ManageCampaign](samples/manage_campaigns.png)  
 
 ---
 
 
+## Features  
+
+- **User Authentication**: Secure login and role-based access (admin, sponsor, influencer).  
+- **Campaign Management**: Sponsors can create, manage, and track campaigns.  
+- **Influencer Search**: Sponsors can search for influencers based on niche, category, and reach.  
+- **Ad Requests**: Influencers can respond to sponsor ad requests with acceptance, rejection, or negotiation.  
+- **Admin Dashboard**: For managing the platform, including user roles and flagged accounts.  
+- **User Profiles**: Detailed profiles for both sponsors and influencers.  
+
+---
+
+## Tech Stack  
+
+**Frontend**:  
+- **HTML**: Structuring web pages.  
+- **CSS**: Styling for responsive and user-friendly design.  
+
+**Backend**:  
+- **Python**: Core backend logic.  
+- **Flask**: Web framework for routing and handling requests.  
+- **Flask-SQLAlchemy**: ORM for database interactions.  
+- **Jinja2**: Dynamic HTML rendering.  
+- **SQLite**: Database engine for storing user, sponsor, influencer, and campaign data.  
+
+---
+
+### **Project Achievement: 100/100**  
+This project not only met but exceeded expectations, earning a perfect score in the college evaluation. The **Best Capstone Project** badge is a testament to the hard work, innovation, and dedication put into building InfluConnect.  
+
+![Best Capstone](samples/BestCapstone.png)  
+
+---
+
+## Setup and Installation  
+
+1. **Create and activate a virtual environment**:  
+   ```bash  
+   python -m venv venv  
+   source venv/bin/activate  
+   
+   # On Windows, use `venv\Scripts\activate`  
+   ```  
+
+2. **Install the required packages**:  
+   ```bash  
+   pip install -r requirements.txt  
+   ```  
+
+3. **Initialize the database**:  
+   ```bash  
+   python3 database-reset.py  
+   ```  
+   This script drops all existing tables and recreates them, effectively resetting the database to its initial state.  
+
+4. **Create an admin user**:  
+   ```bash  
+   flask create-admin  
+   ```  
+
+5. **Run the application**:  
+   ```bash  
+   flask run  
+   ```  
+
+6. **Access the application** at `http://localhost:5000`.  
+
+---
+
+## Important Files  
+
+- `app.py`: Main application file containing routes and app configuration.  
+- `models.py`: Database models for Users, Sponsors, Influencers, Campaigns, etc.  
+- `commands.py`: Custom Flask CLI command to create admin.  
+- `database-reset.py`: Script to reset the database.  
+
+---
+
+## Custom Commands  
+
+### `flask create-admin`  
+This command creates an admin user in the database. It's defined in `commands.py` and can be run using:  
+
+```bash  
+flask create-admin  
+```  
+
+The command checks if an admin user already exists. If not, it creates a new admin user with predefined credentials.  
+
+---
+
+## Database Reset  
+To reset the database, run:  
+
+```bash  
+python database-reset.py  
+```  
+
+This script drops all existing tables and recreates them, effectively resetting the database to its initial state.  
+
+---
+
+## Conclusion  
+
+**InfluConnect** is a foundational yet powerful project designed to bridge the gap between sponsors and influencers. Despite being a basic implementation where we were restricted to using only HTML and CSS for the frontend, every feature has been meticulously crafted to deliver a seamless and intuitive user experience. From secure authentication to campaign management and influencer collaboration, InfluConnect demonstrates how simplicity and functionality can coexist. This project not only met but exceeded expectations, earning a perfect score and the title of Best Capstone Project.
+
+---  
+
+For a more detailed walkthrough, check out the [video demonstration](https://drive.google.com/file/d/1u_BjwY1Ah62BmyikrRy9JsYxe1nL2a_e/view?usp=sharing).
