@@ -61,9 +61,4 @@ InfluConnect/
 
 ---
 
-## ⚙️ How to Run Locally
 
-1. **Clone the repository**
-```bash
-git clone https://github.com/Chanaksha2003/InfluConnect.git
-cd InfluConnect
