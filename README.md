@@ -161,4 +161,6 @@ This script drops all existing tables and recreates them, effectively resetting 
 
 ---  
 
-For a more detailed walkthrough, check out the [video demonstration](https://drive.google.com/file/d/1u_BjwY1Ah62BmyikrRy9JsYxe1nL2a_e/view?usp=sharing).
+**Name** : Chanaksha Rahangdale
+**E-mail**: chanaksha03@gmail.com
+**Linkedin** : https://www.linkedin.com/in/chanaksha-rahangdale-93b726321/
