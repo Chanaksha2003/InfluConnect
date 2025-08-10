@@ -21,7 +21,7 @@ from youtube_utils import get_channel_stats_by_name
 from flask import Flask, render_template, request
 
 def create_app():
-
+ 
     """
     Create and configure the Flask application.
     """
