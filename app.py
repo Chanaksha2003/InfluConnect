@@ -9,7 +9,7 @@ from functools import wraps
 from flask_login import LoginManager
 from flask.cli import with_appcontext
 from flask_login import login_user, logout_user, login_required, current_user
-import click
+import click 
 from extensions import db, login_manager
 from commands import init_app as init_commands
 from models import User, Sponsor, Influencer, Campaign, AdRequest
