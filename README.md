@@ -3,7 +3,7 @@
 ![InfluConnect Banner](samples/home.png)
        
 ## 🚀 Overview       
-    
+     
 **InfluConnect** is a full-stack influencer campaign management platform built using **Python (Flask)**. It connects sponsors with influencers, enabling seamless ad requests, campaign creation, profile browsing, and campaign tracking — all within one streamlined application.
 
 This project is fully developed and maintained by **Chanaksha (Chanaksha03@gmail.com)**.
