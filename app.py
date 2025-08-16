@@ -6,7 +6,7 @@ from flask import Flask, render_template, redirect, url_for, request, flash, ses
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 from functools import wraps
-from flask_login import LoginManager
+from flask_login import LoginManager 
 from flask.cli import with_appcontext
 from flask_login import login_user, logout_user, login_required, current_user
 import click 
