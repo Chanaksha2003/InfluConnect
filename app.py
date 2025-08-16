@@ -1,5 +1,5 @@
 # Importing necessary modules and libraries
-   
+    
 from flask_sqlalchemy import SQLAlchemy        
 from sqlalchemy import or_   
 from flask import Flask, render_template, redirect, url_for, request, flash, session
