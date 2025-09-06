@@ -66,6 +66,15 @@ class User(db.Model, UserMixin):
     sponsor = db.relationship('Sponsor', back_populates='user', uselist=False)
     influencer = db.relationship('Influencer', back_populates='user', uselist=False)
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "username": self.username,
+            "email": self.email,
+            "role": self.role,
+            "is_active": self.is_active
+        }    
+
     def __repr__(self):
         return f'<User {self.username}>'
 

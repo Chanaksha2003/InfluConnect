@@ -2,7 +2,7 @@
 
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import or_
-from flask import Flask, render_template, redirect, url_for, request, flash, session
+from flask import Flask, render_template, redirect, url_for, request, flash, session, Blueprint
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 from functools import wraps
@@ -17,8 +17,9 @@ from flask import send_file
 import io
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import joinedload
-from youtube_utils import get_channel_stats_by_name
-from flask import Flask, render_template, request
+
+api_bp = Blueprint("api", __name__, url_prefix="/api")
+
 
 def create_app():
 
@@ -34,6 +35,8 @@ def create_app():
 
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
     app.config['SECRET_KEY'] = 'your_secret_key'
+    
+
 
     # Initialize the database and login manager
 
@@ -52,6 +55,11 @@ def create_app():
 
     with app.app_context():
         db.create_all()
+
+    # @app.route("/api/hello", methods=["GET"])
+    # def hello_api():
+    #     return {"message": "Hello, this is your first REST API!"}
+    
 
     @app.route('/')
     def home():
@@ -165,6 +173,56 @@ def create_app():
     @app.route('/test')
     def test():
         return "PLeaseeee Give me Goooood Marksss PLeasee Pleaseee pleaseee"
+    
+    # APIS FOR USERS
+
+    @api_bp.route("/users", methods=["GET"])
+    def get_users():
+        users = User.query.all()
+        return {"users": [u.to_dict() for u in users]}  # returns list of users
+
+
+    @api_bp.route("/users/<int:user_id>", methods=["GET"])
+    def get_user(user_id):
+        user = User.query.get_or_404(user_id)
+        return user.to_dict()
+
+
+    @api_bp.route("/users", methods=["POST"])
+    def create_user():
+        data = request.json
+        new_user = User(
+            username=data.get("username"),
+            email=data.get("email"),
+            password=data.get("password"),  # hashing if needed
+            role=data.get("role"),
+            is_active=data.get("is_active", True),
+        )
+        db.session.add(new_user)
+        db.session.commit()
+        return {"message": "User created", "user": new_user.to_dict()}
+
+
+    @api_bp.route("/users/<int:user_id>", methods=["PUT"])
+    def update_user(user_id):
+        user = User.query.get_or_404(user_id)
+        data = request.json
+        user.username = data.get("username", user.username)
+        user.email = data.get("email", user.email)
+        user.role = data.get("role", user.role)
+        user.is_active = data.get("is_active", user.is_active)
+        db.session.commit()
+        return {"message": "User updated", "user": user.to_dict()}
+
+
+    @api_bp.route("/users/<int:user_id>", methods=["DELETE"])
+    def delete_user(user_id):
+        user = User.query.get_or_404(user_id)
+        db.session.delete(user)
+        db.session.commit()
+        return {"message": "User deleted"}
+    
+    # END OF APIS USERS
 
     # Custom decorators for role-based access control
 
@@ -237,6 +295,39 @@ def create_app():
         active_campaigns = Campaign.query.filter_by(status='active', is_public=True).order_by(Campaign.start_date.desc()).limit(10).all()
         
         return render_template('influencer.html', current_user=current_user, active_campaigns=active_campaigns)
+    
+    # APIS FOR INFLUENCER
+
+    @api_bp.route("/influencers", methods=["GET"])
+    def get_influencers():
+        influencers = Influencer.query.all()
+        return {"influencers": [i.to_dict() for i in influencers]}
+
+
+    @api_bp.route("/influencers/<int:influencer_id>", methods=["GET"])
+    def get_influencer(influencer_id):
+        influencer = Influencer.query.get_or_404(influencer_id)
+        return influencer.to_dict()
+
+
+    @api_bp.route("/influencers", methods=["POST"])
+    def create_influencer():
+        data = request.json
+        new_influencer = Influencer(
+            user_id=data.get("user_id"),
+            name=data.get("name"),
+            contact_email=data.get("contact_email"),
+            category=data.get("category"),
+            niche=data.get("niche"),
+            is_flagged=data.get("is_flagged", False),
+            reach=data.get("reach", 0),
+            bio=data.get("bio"),
+        )
+        db.session.add(new_influencer)
+        db.session.commit()
+        return {"message": "Influencer created", "influencer": new_influencer.to_dict()}
+    
+    # END OF INFLUENCER APIS
 
 
     @app.route('/sponsor')
@@ -253,6 +344,38 @@ def create_app():
         campaigns = Campaign.query.filter_by(sponsor_id=current_user.id).all()
         print("Username:", username)
         return render_template('sponsor.html', username=username, campaigns=campaigns)
+    
+    # APIS FOR SPONSOR
+
+    @api_bp.route("/sponsors", methods=["GET"])
+    def get_sponsors():
+        sponsors = Sponsor.query.all()
+        return {"sponsors": [s.to_dict() for s in sponsors]}
+
+
+    @api_bp.route("/sponsors/<int:sponsor_id>", methods=["GET"])
+    def get_sponsor(sponsor_id):
+        sponsor = Sponsor.query.get_or_404(sponsor_id)
+        return sponsor.to_dict()
+
+
+    @api_bp.route("/sponsors", methods=["POST"])
+    def create_sponsor():
+        data = request.json
+        new_sponsor = Sponsor(
+            user_id=data.get("user_id"),
+            company_name=data.get("company_name"),
+            email=data.get("email"),
+            industry=data.get("industry"),
+            budget=data.get("budget"),
+            description=data.get("description"),
+            is_flagged=data.get("is_flagged", False),
+        )
+        db.session.add(new_sponsor)
+        db.session.commit()
+        return {"message": "Sponsor created", "sponsor": new_sponsor.to_dict()}    
+    
+    # END OF SPONSOR APIS
 
 
     @app.route('/campaigns')
@@ -361,6 +484,57 @@ def create_app():
 
         flash('Campaign deleted successfully!', 'success')
         return redirect(url_for('sponsor'))
+    
+    # APIS FOR CAMPAIGN
+
+    @api_bp.route("/campaigns", methods=["GET"])
+    def get_campaigns():
+        campaigns = Campaign.query.all()
+        return {"campaigns": [c.to_dict() for c in campaigns]}
+
+    # GET single campaign
+    @api_bp.route("/campaigns/<int:campaign_id>", methods=["GET"])
+    def get_campaign(campaign_id):
+        campaign = Campaign.query.get_or_404(campaign_id)
+        return campaign.to_dict()
+
+    # POST create new campaign
+    @api_bp.route("/campaigns", methods=["POST"])
+    def create_campaign_api():
+        data = request.get_json()
+        new_campaign = Campaign(
+            title=data.get("title"),
+            company_name=data.get("company_name"),
+            budget=data.get("budget", 0.0),
+            description=data.get("description", ""),
+            category=data.get("category", "General"),
+            status=data.get("status", "active")
+        )
+        db.session.add(new_campaign)
+        db.session.commit()
+        return {"message": "Campaign created!", "campaign": new_campaign.to_dict()}, 201
+
+    # PUT update campaign
+    @api_bp.route("/campaigns/<int:campaign_id>", methods=["PUT"])
+    def update_campaign_api(campaign_id):
+        campaign = Campaign.query.get_or_404(campaign_id)
+        data = request.get_json()
+        for key in ["title", "company_name", "budget", "description", "category", "status"]:
+            if key in data:
+                setattr(campaign, key, data[key])
+        db.session.commit()
+        return {"message": "Campaign updated!", "campaign": campaign.to_dict()}
+
+    # DELETE campaign
+    @api_bp.route("/campaigns/<int:campaign_id>", methods=["DELETE"])
+    def delete_campaign_api(campaign_id):
+        campaign = Campaign.query.get_or_404(campaign_id)
+        db.session.delete(campaign)
+        db.session.commit()
+        return {"message": "Campaign deleted!"}
+    
+    # APIS END FOR CAMPAIGN
+
 
     @app.route('/logout')
     def logout():
@@ -529,6 +703,39 @@ def create_app():
         ad_request.updated_at = datetime.utcnow()
         db.session.commit()
         return redirect(url_for('influencer_ad_requests'))
+    
+    # APIS FOR AD REQUESTS
+
+    @api_bp.route("/ad_requests", methods=["GET"])
+    def get_ad_requests():
+        ad_requests = AdRequest.query.all()
+        return {"ad_requests": [a.to_dict() for a in ad_requests]}
+
+
+    @api_bp.route("/ad_requests/<int:ad_request_id>", methods=["GET"])
+    def get_ad_request(ad_request_id):
+        ad_request = AdRequest.query.get_or_404(ad_request_id)
+        return ad_request.to_dict()
+
+
+    @api_bp.route("/ad_requests", methods=["POST"])
+    def create_ad_request():
+        data = request.json
+        new_request = AdRequest(
+            campaign_id=data.get("campaign_id"),
+            influencer_id=data.get("influencer_id"),
+            status=data.get("status", "pending"),
+            details=data.get("details"),
+            negotiation_terms=data.get("negotiation_terms"),
+            communication_log=data.get("communication_log"),
+            renegotiation_email=data.get("renegotiation_email"),
+            company_name=data.get("company_name"),
+        )
+        db.session.add(new_request)
+        db.session.commit()
+        return {"message": "Ad request created", "ad_request": new_request.to_dict()}    
+    
+    # End OF AD REQUESTS APIS
 
     @app.route('/search_influencers', methods=['GET', 'POST'])
     @login_required
@@ -926,23 +1133,13 @@ def create_app():
         error_type = request.args.get('error_type', 'UnknownError')
         error_message = request.args.get('error_message', 'An unexpected error occurred')
         return render_template('funny_error.html', error_type=error_type, error_message=error_message), 
-
+    
+    app.register_blueprint(api_bp)
     init_commands(app)
     return app
-
-app = Flask(__name__)
-@app.route('/search_youtuber', methods=['GET', 'POST'])
-def search_youtuber():
-    result = None
-    if request.method == 'POST':
-        youtuber_name = request.form['name']
-        result = get_channel_stats_by_name(youtuber_name)
-    return render_template('search_youtuber.html', result=result)
-
-
-
+ 
 # Run the application
 
-if __name__ == '__main__':
+if __name__ == '__main__': 
     app = create_app()
     app.run(debug=True)
