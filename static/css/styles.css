@@ -3,7 +3,7 @@ body, html {
     margin: 0;         
     font-family: Arial, sans-serif;        
 }     
-    
+     
 .content {
     position: absolute;
     top: 25%; /* Adjust this value to move the content higher or lower */
